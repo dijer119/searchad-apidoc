@@ -35,6 +35,7 @@ public class Adgroups {
 		adgroup.setPcChannelId(channelId);
 		adgroup.setName(name);
 		adgroup.setBidAmt(70);
+		adgroup.setAdgroupType("WEB_SITE");
 
 		HttpResponse<String> response =
 				rest.post(apiPath, customerId)

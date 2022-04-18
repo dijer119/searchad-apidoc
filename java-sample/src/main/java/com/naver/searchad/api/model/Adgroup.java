@@ -32,4 +32,5 @@ public class Adgroup {
 	private List<Target> targets;
 	private String status;
 	private String statusReason;
+	private String adgroupType;
 }

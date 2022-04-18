@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 public class AdManagementSample {
 
+	public static String apiPrefix = "";
+
 	public static void main(String[] args) {
 		try {
 			Properties properties = PropertiesLoader.fromResource("sample.properties");
@@ -19,6 +21,7 @@ public class AdManagementSample {
 			String apiKey = properties.getProperty("API_KEY");
 			String secretKey = properties.getProperty("SECRET_KEY");
 			long managerCustomerId = Long.parseLong(properties.getProperty("CUSTOMER_ID"));
+			apiPrefix = properties.getProperty("API_PREFIX");
 
 			RestClient rest = RestClient.of(baseUrl, apiKey, secretKey);
 
@@ -26,7 +29,8 @@ public class AdManagementSample {
 			CustomerLink[] customerLinks = CustomerLinks.list(rest, managerCustomerId, "MYCLIENTS");
 
 			// 캠페인 목록 조회 GET /ncc/campaigns
-			long customerId = customerLinks[0].getClientCustomerId();
+//			long customerId = customerLinks[0].getClientCustomerId();
+			long customerId = managerCustomerId;
 			Campaign[] campaigns = Campaigns.list(rest, customerId);
 			
 			//캠페인 수정  PUT /ncc/campaigns/{campaignId}{?fields}
@@ -43,6 +47,9 @@ public class AdManagementSample {
 			// 그룹 목록 조회 GET /ncc/adgroups{?nccCampaignId}
 			String campaignId = campaigns[0].getNccCampaignId();
 			Adgroup[] adgroups = Adgroups.listByCampaignId(rest, customerId, campaignId);
+			System.out.println("*********Adgroups length**************************");
+			System.out.println(customerId + " : " + campaignId);
+			System.out.println(adgroups.length);
 
 			Adgroup adgroup = null;
 			Adgroup adgroup2 = null;
@@ -62,9 +69,11 @@ public class AdManagementSample {
 				Adgroup updatedAdgroup = Adgroups.update(rest, customerId, adgroup, "userLock");
 
 				String adgroupId = adgroups[0].getNccAdgroupId();
+
+				Criterion.list(rest, adgroupId, customerId);
 				
 				// 타게팅
-				TargetSamples(rest, customerId, adgroups[0]);
+//				TargetSamples(rest, customerId, adgroups[0]);
 
 				// 소재
 				AdSamples(rest, customerId, adgroupId, adgroup2.getNccAdgroupId());
@@ -120,12 +129,13 @@ public class AdManagementSample {
 		createAd.setType(adType);
 		createAd.setAd(text45_ad);
 
-		Ad createdAd = Ads.create(rest, createAd, customerId);
-		if (createdAd == null) {
-			throw new Exception("POST /ncc/ads");
-		}
-		adId = createdAd.getNccAdId();
-		System.out.println("create: " + createdAd.toString());
+//		Ad createdAd = Ads.create(rest, createAd, customerId);
+//		if (createdAd == null) {
+//			throw new Exception("POST /ncc/ads");
+//		}
+//		adId = createdAd.getNccAdId();
+//		System.out.println("create: " + createdAd.toString());
+		adId = "nad-a001-01-000000000000021";
 		////////////////////////////////////////////////////////////////////////////////////
 
 		// Get the ads of an adgroup : GET /ncc/ads{?nccAdgroupId} /////////////////////////
@@ -193,17 +203,17 @@ public class AdManagementSample {
 			}
 		}
 
-		Ad[] copiedAds = Ads.copy(rest, ids, targetAdgroupId, UserLock.ENABLED, customerId);
-		if (copiedAds == null) {
-			throw new Exception("PUT /ncc/ads{?ids,targetAdgroupId,userLock}");
-		}
-		System.out.println("copiedAds: " + copiedAds.toString());
+//		Ad[] copiedAds = Ads.copy(rest, "nad-a001-01-000000000000002", targetAdgroupId, UserLock.ENABLED, customerId);
+//		if (copiedAds == null) {
+//			throw new Exception("PUT /ncc/ads{?ids,targetAdgroupId,userLock}");
+//		}
+//		System.out.println("copiedAds: " + copiedAds.toString());
 		///////////////////////////////////////////////////////////////////////////////////
 
 
 		// delete a ad: DELETE /ncc/ads/{adId} /////////////////////////////////////////
-		Ads.delete(rest, createdAd.getNccAdId(), customerId);
-		System.out.println("DELETE Ad done.");
+//		Ads.delete(rest, "nad-a001-01-000000000000021", customerId);
+//		System.out.println("DELETE Ad done.");
 		///////////////////////////////////////////////////////////////////////////////////
 	}
 
