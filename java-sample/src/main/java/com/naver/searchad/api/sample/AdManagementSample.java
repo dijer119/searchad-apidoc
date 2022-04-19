@@ -1,6 +1,7 @@
 package com.naver.searchad.api.sample;
 
 import com.naver.searchad.api.model.*;
+import com.naver.searchad.api.model.estimate.DictionaryType;
 import com.naver.searchad.api.rest.*;
 import com.naver.searchad.api.util.PropertiesLoader;
 import com.naver.searchad.api.util.RestClient;
@@ -58,44 +59,44 @@ public class AdManagementSample {
 				
 				
 				//채널생성 POST /ncc/channels
-				Channel newChannel = Channels.create(rest, customerId, "API-CHANNEL#" + random.nextInt(1000), "http://www.naver-api"  + random.nextInt(1000) +  ".com");
-				
-				// 그룹 생성 POST /ncc/adgroups
-				adgroup = Adgroups.create(rest, customerId, campaignId, "API-GROUP#" + random.nextInt(1000) + "_" + random.nextInt(1000), channels[0].getNccBusinessChannelId());
-				adgroup2 = Adgroups.create(rest, customerId, campaignId, "API-GROUP#" + random.nextInt(1000) + "_" + random.nextInt(1000), newChannel.getNccBusinessChannelId());
+//				Channel newChannel = Channels.create(rest, customerId, "API-CHANNEL#" + random.nextInt(1000), "http://www.naver-api"  + random.nextInt(1000) +  ".com");
+//
+//				// 그룹 생성 POST /ncc/adgroups
+//				adgroup = Adgroups.create(rest, customerId, campaignId, "API-GROUP#" + random.nextInt(1000) + "_" + random.nextInt(1000), channels[0].getNccBusinessChannelId());
+//				adgroup2 = Adgroups.create(rest, customerId, campaignId, "API-GROUP#" + random.nextInt(1000) + "_" + random.nextInt(1000), newChannel.getNccBusinessChannelId());
+//
+//				// 그룹 수정 PUT /ncc/adgroups/{adgroupId}{?fields}
+//				adgroup.setUserLock(false);
+//				Adgroup updatedAdgroup = Adgroups.update(rest, customerId, adgroup, "userLock");
+//
+//				String adgroupId = adgroups[0].getNccAdgroupId();
 
-				// 그룹 수정 PUT /ncc/adgroups/{adgroupId}{?fields}
-				adgroup.setUserLock(false);
-				Adgroup updatedAdgroup = Adgroups.update(rest, customerId, adgroup, "userLock");
-
-				String adgroupId = adgroups[0].getNccAdgroupId();
-
-				Criterion.list(rest, adgroupId, customerId);
+				Criterion.dictionaryList(rest, customerId, DictionaryType.AGE);
 				
 				// 타게팅
 //				TargetSamples(rest, customerId, adgroups[0]);
 
 				// 소재
-				AdSamples(rest, customerId, adgroupId, adgroup2.getNccAdgroupId());
-				
-				//키워드
-				AdKeywordSample(rest, customerId, adgroupId);
-
-				// 전화번호 유형의 비즈채널이 존재하는 경우 전화번호 유형의 확장 소재를 등록해볼 수 있다.
-				Optional<Channel> phoneChannel = Stream.of(channels).filter(channel -> "PHONE".equals(channel.getChannelTp())).findFirst();
-
-				if (phoneChannel.isPresent()) {
-					// 확장 소재
-					AdExtensionSample(rest, customerId, adgroupId, phoneChannel.get().getNccBusinessChannelId());
-				}
+//				AdSamples(rest, customerId, adgroupId, adgroup2.getNccAdgroupId());
+//
+//				//키워드
+//				AdKeywordSample(rest, customerId, adgroupId);
+//
+//				// 전화번호 유형의 비즈채널이 존재하는 경우 전화번호 유형의 확장 소재를 등록해볼 수 있다.
+//				Optional<Channel> phoneChannel = Stream.of(channels).filter(channel -> "PHONE".equals(channel.getChannelTp())).findFirst();
+//
+//				if (phoneChannel.isPresent()) {
+//					// 확장 소재
+//					AdExtensionSample(rest, customerId, adgroupId, phoneChannel.get().getNccBusinessChannelId());
+//				}
 
 			} finally {
-				if (adgroup != null) {
-					Adgroups.delete(rest, customerId, adgroup.getNccAdgroupId());
-				}
-				if (adgroup2 != null) {
-					Adgroups.delete(rest, customerId, adgroup2.getNccAdgroupId());
-				}
+//				if (adgroup != null) {
+//					Adgroups.delete(rest, customerId, adgroup.getNccAdgroupId());
+//				}
+//				if (adgroup2 != null) {
+//					Adgroups.delete(rest, customerId, adgroup2.getNccAdgroupId());
+//				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
